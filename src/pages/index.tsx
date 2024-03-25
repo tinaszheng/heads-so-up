@@ -1,15 +1,10 @@
 import CreatePrompt from "@/components/CreatePrompt";
 import Game from "@/components/Game";
+import { Category } from "@/utils";
 import { useState } from "react";
 
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
-  const [clues, setClues] = useState<string[]>([]);
-
-  const onReset = () => {
-    setPrompt("");
-    setClues([]);
-  };
+  const [category, setCategory] = useState<Category>();
 
   return (
     <main className={`flex min-h-screen flex-col items-center p-8 gap-2`}>
@@ -17,15 +12,10 @@ export default function Home() {
         This game is best experienced in landscape mode! Turn your phone
         sideways pls.
       </div>
-      {!prompt && (
-        <CreatePrompt
-          onSuccess={(prompt, clues) => {
-            setPrompt(prompt);
-            setClues(clues);
-          }}
-        />
+      {!category && <CreatePrompt onSuccess={setCategory} />}
+      {category && (
+        <Game category={category} onReset={() => setCategory(undefined)} />
       )}
-      {prompt && <Game prompt={prompt} clues={clues} onReset={onReset} />}
     </main>
   );
 }

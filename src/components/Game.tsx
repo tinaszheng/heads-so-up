@@ -1,10 +1,9 @@
-import { shuffled } from "@/utils";
+import { Category, Difficulty, shuffled } from "@/utils";
 import { useEffect, useRef, useState } from "react";
 import Credits from "./Credits";
 
 type Props = {
-  prompt: string;
-  clues: string[];
+  category: Category;
   onReset: () => void;
 };
 
@@ -15,7 +14,10 @@ type Result = {
 
 const DEFAULT_GAME_TIME = 60; // 1 minute
 
-export default function Game({ prompt, clues, onReset }: Props) {
+export default function Game({
+  category: { difficulty, prompt, clues },
+  onReset,
+}: Props) {
   const [secondsLeft, setSecondsLeft] = useState(DEFAULT_GAME_TIME);
   const [scrambledClues, setScrambledClues] = useState(shuffled(clues));
   const [clueIndex, setClueIndex] = useState(0);
@@ -39,6 +41,7 @@ export default function Game({ prompt, clues, onReset }: Props) {
     countdown.current = interval;
   };
 
+  // logic to end the game
   useEffect(() => {
     if (secondsLeft === 0 || clueIndex === scrambledClues.length) {
       if (secondsLeft === 0) {
@@ -50,7 +53,20 @@ export default function Game({ prompt, clues, onReset }: Props) {
       try {
         window.navigator.vibrate(100);
       } catch (e) {}
+
       clearInterval(countdown.current);
+
+      // for tracking category popularity :D
+      fetch("https://categorysoup-production.up.railway.app/played", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          difficulty: difficulty.toLowerCase(),
+          category: prompt,
+        }),
+      });
     }
   }, [secondsLeft, clueIndex, scrambledClues]);
 

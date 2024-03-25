@@ -1,15 +1,10 @@
+import { Category, Difficulty } from "@/utils";
 import { useState } from "react";
-
-enum Difficulty {
-  Easy = "Easy",
-  Medium = "Medium",
-  Hard = "Hard",
-}
 
 export default function CreatePrompt({
   onSuccess,
 }: {
-  onSuccess: (prompt: string, clues: string[]) => void;
+  onSuccess: (category: Category) => void;
 }) {
   const [prompt, setPrompt] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Medium);
@@ -39,9 +34,9 @@ export default function CreatePrompt({
         throw new Error("No clues?");
       }
 
-      onSuccess(prompt, clues);
+      onSuccess({ prompt, difficulty, clues });
     } catch (e) {
-        setError("There was an error D:");
+      setError("There was an error D:");
     }
 
     setLoading(false);
