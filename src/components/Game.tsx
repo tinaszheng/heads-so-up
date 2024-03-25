@@ -1,4 +1,4 @@
-import { shuffleArray } from "@/utils";
+import { shuffled } from "@/utils";
 import { useEffect, useRef, useState } from "react";
 import Credits from "./Credits";
 
@@ -17,7 +17,7 @@ const DEFAULT_GAME_TIME = 60; // 1 minute
 
 export default function Game({ prompt, clues, onReset }: Props) {
   const [secondsLeft, setSecondsLeft] = useState(DEFAULT_GAME_TIME);
-  const [scrambledClues, setScrambledClues] = useState(clues);
+  const [scrambledClues, setScrambledClues] = useState(shuffled(clues));
   const [clueIndex, setClueIndex] = useState(0);
   const countdown = useRef<NodeJS.Timeout>();
   const [hasStarted, setHasStarted] = useState(false);
@@ -41,7 +41,9 @@ export default function Game({ prompt, clues, onReset }: Props) {
 
   useEffect(() => {
     if (secondsLeft === 0 || clueIndex === scrambledClues.length) {
-      window.navigator.vibrate(100);
+      try {
+        window.navigator.vibrate(100);
+      } catch (e) {}
       clearInterval(countdown.current);
     }
   }, [secondsLeft, clueIndex, scrambledClues]);
@@ -55,9 +57,7 @@ export default function Game({ prompt, clues, onReset }: Props) {
     setSecondsLeft(DEFAULT_GAME_TIME);
     setResult([]);
     setClueIndex(0);
-    const newClues = [...scrambledClues];
-    shuffleArray(newClues);
-    setScrambledClues(newClues);
+    setScrambledClues(shuffled(clues));
     setHasStarted(false);
     setPreviousClueSuccess(undefined);
   };
