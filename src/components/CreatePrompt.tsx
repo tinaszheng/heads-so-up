@@ -20,7 +20,7 @@ export default function CreatePrompt({
     setLoading(true);
 
     try {
-      const res = await fetch("http://dev-dash.dev/category", {
+      const res = await fetch("https://dev-dash.dev/category", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
