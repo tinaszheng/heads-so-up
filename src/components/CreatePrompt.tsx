@@ -76,7 +76,7 @@ export default function CreatePrompt({
   }
 
   return (
-    <div className="font-madimiOne">
+    <div className="font-madimiOne flex flex-col w-full">
       <div className="text-4xl text-center">🍜 CATEGORY SOUP 🍲</div>
       <div className="flex flex-col items-center p-2">
         Enter your prompt:
