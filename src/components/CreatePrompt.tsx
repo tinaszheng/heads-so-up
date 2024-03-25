@@ -36,7 +36,14 @@ export default function CreatePrompt({
 
       onSuccess(prompt, clues);
     } catch (e) {
-      setError("There was an error D:");
+      onSuccess(prompt, [
+        "Clue 1",
+        "Clue 2",
+        "Clue 3",
+        "Clue 4",
+        "This is an ultra long clue with so much text that you won't be able to handle it.",
+      ]);
+      //   setError("There was an error D:");
     }
 
     setLoading(false);

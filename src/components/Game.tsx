@@ -90,7 +90,7 @@ export default function Game({ prompt, clues, onReset }: Props) {
       <div className="flex flex-col text-center gap-2">
         <div>No more clues :(</div>
         <GameResult result={result} />
-        <div className="flex gap-4">
+        <div className="flex gap-4 justify-center">
           <button
             className="text-white rounded-full p-2 px-8 border-4 border-none bg-indigo-300"
             onClick={onPlayAgain}
@@ -111,14 +111,16 @@ export default function Game({ prompt, clues, onReset }: Props) {
   return (
     <div className="flex flex-col flex-1 w-full">
       <div className="self-center">Time left: {secondsLeft}</div>
-      <div className="text-4xl flex-1 self-center flex flex-row items-center">
+      <div className="text-4xl flex-1 self-center flex flex-row items-center text-center">
         {scrambledClues[clueIndex]}
       </div>
       <div className="flex justify-between">
         <div
-          className={`-z-50 absolute left-0 top-0 w-1/2 h-screen flex bg-yellow-100 ${
-            previousClueSuccess === false ? "opacity-100" : "opacity-0"
-          }`}
+          style={{
+            opacity: previousClueSuccess === false ? 1 : 0,
+            transition: "opacity 1s ease",
+          }}
+          className={`-z-50 absolute left-0 top-0 w-1/2 h-screen flex bg-yellow-100`}
         />
         <button
           className={`absolute left-0 top-0 w-1/2 h-screen flex`}
@@ -127,9 +129,11 @@ export default function Game({ prompt, clues, onReset }: Props) {
           <div className="self-end p-12">Skip</div>
         </button>
         <div
-          className={`-z-50 absolute right-0 top-0 w-1/2 h-screen flex bg-green-100 ${
-            previousClueSuccess === true ? "opacity-100" : "opacity-0"
-          }`}
+          style={{
+            opacity: previousClueSuccess === true ? 1 : 0,
+            transition: "opacity 1s ease",
+          }}
+          className={`-z-50 absolute right-0 top-0 w-1/2 h-screen flex bg-green-100`}
         />
         <button
           className={`absolute right-0 top-0 w-1/2 h-screen flex`}
