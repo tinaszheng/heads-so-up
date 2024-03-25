@@ -76,10 +76,12 @@ export default function CreatePrompt({
   }
 
   return (
-    <div className="font-madimiOne flex flex-col w-full">
-      <div className="text-4xl text-center">🍜 CATEGORY SOUP 🍲</div>
-      <div className="flex flex-col items-center p-2">
-        Enter your prompt:
+    <div className="font-madimiOne flex flex-col w-full text-2xl">
+      <div className="flex flex-col items-center p-2 gap-4">
+        <div className="text-lg text-center">
+          🍜 WELCOME TO CATEGORY SOUP 🍲
+        </div>
+        <div className="text-center">Enter your prompt:</div>
         <textarea
           placeholder="e.g. 'Game of Thrones'"
           value={prompt}
@@ -87,7 +89,6 @@ export default function CreatePrompt({
           maxLength={500}
           className="w-3/4 border-4 border-indigo-300 p-1 rounded-lg focus:outline-none focus:ring focus:ring-indigo-400"
         />
-        <br />
         Select your difficulty:
         <div className="flex gap-2">
           {Object.values(Difficulty).map((diff) => (
@@ -102,11 +103,10 @@ export default function CreatePrompt({
             </button>
           ))}
         </div>
-        <br />
         <button
           disabled={!prompt}
           onClick={onSubmit}
-          className={`text-white rounded-full p-2 px-20 border-4 text-2xl border-none ${
+          className={`text-white rounded-full p-2 text-4xl px-20 border-4 border-none ${
             !prompt ? "bg-slate-200" : "bg-indigo-300"
           }`}
         >
