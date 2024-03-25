@@ -20,30 +20,26 @@ export default function CreatePrompt({
     setLoading(true);
 
     try {
-      const res = await fetch("https://dev-dash.dev/category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          difficulty: difficulty.toLowerCase(),
-          category: prompt,
-        }),
-      });
+      const res = await fetch(
+        "https://categorysoup-production.up.railway.app/category",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            difficulty: difficulty.toLowerCase(),
+            category: prompt,
+          }),
+        }
+      );
 
-      console.log("res", res);
-      const clues = await res.json();
+      const clues = (await res.json()).clues;
+      console.log("clues", clues);
 
       onSuccess(prompt, clues);
     } catch (e) {
-      onSuccess(prompt, [
-        "Clue 1",
-        "Clue 2",
-        "Clue 3",
-        "Clue 4",
-        "This is an ultra long clue with so much text that you won't be able to handle it.",
-      ]);
-      //   setError("There was an error D:");
+        setError("There was an error D:");
     }
 
     setLoading(false);

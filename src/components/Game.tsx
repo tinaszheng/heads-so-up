@@ -1,5 +1,6 @@
 import { shuffleArray } from "@/utils";
 import { useEffect, useRef, useState } from "react";
+import Credits from "./Credits";
 
 type Props = {
   prompt: string;
@@ -66,10 +67,11 @@ export default function Game({ prompt, clues, onReset }: Props) {
       <div className="flex flex-col p-4 text-center gap-2">
         <div>TIME'S UP!</div>
         <GameResult result={result} />
-        <div className="flex gap-4">
+        <div className="flex gap-4 justify-center">
           <button onClick={onPlayAgain}>Play again</button>
           <button onClick={onReset}>New prompt</button>
         </div>
+        <Credits />
       </div>
     );
   }
@@ -104,6 +106,7 @@ export default function Game({ prompt, clues, onReset }: Props) {
             New prompt
           </button>
         </div>
+        <Credits />
       </div>
     );
   }
