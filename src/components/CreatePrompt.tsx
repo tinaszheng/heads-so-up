@@ -35,7 +35,9 @@ export default function CreatePrompt({
       );
 
       const clues = (await res.json()).clues;
-      console.log("clues", clues);
+      if (!clues.length) {
+        throw new Error("No clues?");
+      }
 
       onSuccess(prompt, clues);
     } catch (e) {

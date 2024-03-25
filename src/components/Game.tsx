@@ -41,6 +41,12 @@ export default function Game({ prompt, clues, onReset }: Props) {
 
   useEffect(() => {
     if (secondsLeft === 0 || clueIndex === scrambledClues.length) {
+      if (secondsLeft === 0) {
+        setResult((prev) => [
+          ...prev,
+          { clue: scrambledClues[clueIndex], success: false },
+        ]);
+      }
       try {
         window.navigator.vibrate(100);
       } catch (e) {}
@@ -65,11 +71,21 @@ export default function Game({ prompt, clues, onReset }: Props) {
   if (secondsLeft === 0) {
     return (
       <div className="flex flex-col p-4 text-center gap-2">
-        <div>TIME'S UP!</div>
-        <GameResult result={result} />
+        <div className="text-lg">TIME'S UP!</div>
+        <GameResult prompt={prompt} result={result} />
         <div className="flex gap-4 justify-center">
-          <button onClick={onPlayAgain}>Play again</button>
-          <button onClick={onReset}>New prompt</button>
+          <button
+            className="text-white rounded-full p-2 px-8 border-4 border-none bg-indigo-300"
+            onClick={onPlayAgain}
+          >
+            Play again
+          </button>
+          <button
+            className="text-white rounded-full p-2 px-8 border-4 border-none bg-indigo-300"
+            onClick={onReset}
+          >
+            New prompt
+          </button>
         </div>
         <Credits />
       </div>
@@ -79,7 +95,7 @@ export default function Game({ prompt, clues, onReset }: Props) {
   if (!hasStarted) {
     return (
       <button
-        className="text-indigo-300 absolute h-screen w-screen top-0 left-0"
+        className="text-indigo-300 absolute h-screen w-screen top-0 left-0 text-4xl"
         onClick={startGame}
       >
         Click anywhere to start!
@@ -90,8 +106,8 @@ export default function Game({ prompt, clues, onReset }: Props) {
   if (clueIndex === scrambledClues.length) {
     return (
       <div className="flex flex-col text-center gap-2">
-        <div>No more clues :(</div>
-        <GameResult result={result} />
+        <div className="text-lg">No more clues :(</div>
+        <GameResult prompt={prompt} result={result} />
         <div className="flex gap-4 justify-center">
           <button
             className="text-white rounded-full p-2 px-8 border-4 border-none bg-indigo-300"
@@ -112,7 +128,7 @@ export default function Game({ prompt, clues, onReset }: Props) {
   }
 
   return (
-    <div className="flex flex-col flex-1 w-full">
+    <div className="flex flex-col flex-1 w-full overflow-hidden">
       <div className="self-center">Time left: {secondsLeft}</div>
       <div className="text-4xl flex-1 self-center flex flex-row items-center text-center">
         {scrambledClues[clueIndex]}
@@ -153,11 +169,12 @@ function pluralize(points: number) {
   return points === 1 ? "1 point" : `${points} points`;
 }
 
-function GameResult({ result }: { result: Result }) {
+function GameResult({ prompt, result }: { prompt: string; result: Result }) {
   const numPoints = result.filter((res) => res.success).length;
   return (
     <div className="flex flex-col gap-2 align-center">
-      <div>You scored {pluralize(numPoints)}!</div>
+      <div className="text-4xl">You scored {pluralize(numPoints)}!</div>
+      <div>Prompt: "{prompt}"</div>
       <div className="text-center">
         {result.map((res) => {
           return (
