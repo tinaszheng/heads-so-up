@@ -79,7 +79,7 @@ export default function CreatePrompt({
 
   return (
     <div className="font-madimiOne">
-      <div className="text-4xl text-center">HEADS SO UP</div>
+      <div className="text-4xl text-center">🍜 CATEGORY SOUP 🍲</div>
       <div className="flex flex-col items-center p-2">
         Enter your prompt:
         <textarea
