@@ -14,18 +14,48 @@ export default function CreatePrompt({
   const [prompt, setPrompt] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Medium);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
+    try {
+      const res = await fetch("http://dev-dash.dev/category", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          difficulty: difficulty.toLowerCase(),
+          category: prompt,
+        }),
+      });
 
-    // submit prompt and difficulty to API
-    const clues = ["Clue 1", "Clue 2", "Clue 3", "Clue 4", "Clue 5", "Clue 6"];
-    onSuccess(prompt, clues);
+      console.log("res", res);
+      const clues = await res.json();
+
+      onSuccess(prompt, clues);
+    } catch (e) {
+      setError("There was an error D:");
+    }
+
+    setLoading(false);
   };
+
+  if (error) {
+    return (
+      <div className="flex flex-col flex-1 justify-center gap-4 text-center">
+        <div>{error}</div>
+        <button
+          disabled={!prompt}
+          onClick={() => setError("")}
+          className={`text-white rounded-full p-2 px-8 border-4 text-2xl border-none bg-indigo-300`}
+        >
+          Try again?
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
