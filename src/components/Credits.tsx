@@ -7,7 +7,7 @@ export default function Credits() {
       <Link href="https://twitter.com/MarkToda">@marktoda</Link> and
       <Link href="https://twitter.com/patagucci_girl">@patagucci_girl</Link>.
       We'd appreciate donations to help with ChatGPT costs at
-      hellopanda.uni.eth. Optimism or Base USDC preferred :D
+      categorysoup.uni.eth. Optimism or Base USDC preferred :D
     </div>
   );
 }
