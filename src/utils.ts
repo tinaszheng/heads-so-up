@@ -7,6 +7,13 @@ export function shuffled<T>(array: T[]): T[] {
   return copy;
 }
 
+export function maybeBuzzPhone() {
+  // only works on android smh
+  try {
+    window.navigator.vibrate(100);
+  } catch (_) {}
+}
+
 export enum Difficulty {
   Easy = "Easy",
   Medium = "Medium",

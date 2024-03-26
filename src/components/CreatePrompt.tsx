@@ -1,5 +1,6 @@
 import { Category, Difficulty } from "@/utils";
 import { useState } from "react";
+import CategorySuggestions from "./CategorySuggestions";
 
 export default function CreatePrompt({
   onSuccess,
@@ -10,24 +11,22 @@ export default function CreatePrompt({
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Medium);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const onSubmit = async () => {
+  const onSubmit = async (prompt: string, difficulty: Difficulty) => {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        "https://categorysoup-production.up.railway.app/category",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            difficulty: difficulty.toLowerCase(),
-            category: prompt,
-          }),
-        }
-      );
+      const res = await fetch("https://api.categorysoup.com/category", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          difficulty: difficulty.toLowerCase(),
+          prompt,
+        }),
+      });
 
       const clues = (await res.json()).clues;
       if (!clues.length) {
@@ -70,6 +69,12 @@ export default function CreatePrompt({
     );
   }
 
+  const onSelectCategorySuggestion = (
+    promptAndDifficulty: Omit<Category, "clues">
+  ) => {
+    onSubmit(promptAndDifficulty.prompt, promptAndDifficulty.difficulty);
+  };
+
   return (
     <div className="font-madimiOne flex flex-col w-full text-2xl">
       <div className="flex flex-col items-center p-2 gap-4">
@@ -100,13 +105,24 @@ export default function CreatePrompt({
         </div>
         <button
           disabled={!prompt}
-          onClick={onSubmit}
+          onClick={() => onSubmit(prompt, difficulty)}
           className={`text-white rounded-full p-2 text-4xl px-20 border-4 border-none ${
             !prompt ? "bg-slate-200" : "bg-indigo-300"
           }`}
         >
           Let's go!
         </button>
+        {!showSuggestions && (
+          <button
+            onClick={() => setShowSuggestions(true)}
+            className="text-blue-500 text-xs"
+          >
+            Can't think? Show other user generated categories.
+          </button>
+        )}
+        {showSuggestions && (
+          <CategorySuggestions onSelect={onSelectCategorySuggestion} />
+        )}
       </div>
     </div>
   );

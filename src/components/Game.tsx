@@ -1,4 +1,4 @@
-import { Category, Difficulty, shuffled } from "@/utils";
+import { Category, maybeBuzzPhone, shuffled } from "@/utils";
 import { useEffect, useRef, useState } from "react";
 import Credits from "./Credits";
 
@@ -50,21 +50,19 @@ export default function Game({
           { clue: scrambledClues[clueIndex], success: false },
         ]);
       }
-      try {
-        window.navigator.vibrate(100);
-      } catch (e) {}
 
+      maybeBuzzPhone();
       clearInterval(countdown.current);
 
       // for tracking category popularity :D
-      fetch("https://categorysoup-production.up.railway.app/played", {
+      fetch("https://api.categorysoup.com/played", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           difficulty: difficulty.toLowerCase(),
-          category: prompt,
+          prompt,
         }),
       });
     }
