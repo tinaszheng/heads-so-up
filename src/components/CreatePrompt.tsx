@@ -11,7 +11,6 @@ export default function CreatePrompt({
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Medium);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const onSubmit = async (prompt: string, difficulty: Difficulty) => {
     setLoading(true);
@@ -112,17 +111,7 @@ export default function CreatePrompt({
         >
           Let's go!
         </button>
-        {!showSuggestions && (
-          <button
-            onClick={() => setShowSuggestions(true)}
-            className="text-blue-500 text-xs"
-          >
-            Can't think? Show other user generated categories.
-          </button>
-        )}
-        {showSuggestions && (
-          <CategorySuggestions onSelect={onSelectCategorySuggestion} />
-        )}
+        <CategorySuggestions onSelect={onSelectCategorySuggestion} />
       </div>
     </div>
   );
