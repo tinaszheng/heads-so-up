@@ -5,6 +5,7 @@ type PromptAndDifficulty = Omit<Category, "clues">;
 
 type CategoryResult = {
   category: PromptAndDifficulty;
+  emoji: string;
   played: number;
 };
 
@@ -14,7 +15,7 @@ export default function CategorySuggestions({
   onSelect: (category: PromptAndDifficulty) => void;
 }) {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<PromptAndDifficulty[]>([]);
+  const [categories, setCategories] = useState<CategoryResult[]>([]);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -23,7 +24,7 @@ export default function CategorySuggestions({
       });
 
       const results = await res.json();
-      setCategories(results.map((res: CategoryResult) => res.category));
+      setCategories(results);
       setLoading(false);
     }
 
@@ -38,11 +39,12 @@ export default function CategorySuggestions({
         Check out categories other users have created:
       </div>
       <div className="flex gap-4 justify-center flex-wrap">
-        {categories.map((category) => (
+        {categories.map(({ category, emoji }) => (
           <CategoryBox
+            emoji={emoji}
             prompt={category.prompt}
             difficulty={category.difficulty}
-            key={category.prompt}
+            key={`${category.difficulty}-${category.prompt}`}
             onClick={() => onSelect(category)}
           />
         ))}
@@ -52,17 +54,19 @@ export default function CategorySuggestions({
 }
 
 function CategoryBox({
+  emoji,
   prompt,
   difficulty,
   onClick,
 }: {
+  emoji: string;
   prompt: string;
   difficulty: Difficulty;
   onClick: () => void;
 }) {
   return (
     <div className="grow border-2 rounded-md p-2 border-indigo-300 flex flex-col gap-2">
-      <div className="text-2xl">{prompt}</div>
+      <div className="text-2xl">{emoji} {prompt}</div>
       <DifficultyLabel difficulty={difficulty} />
       <button className="text-lg" onClick={onClick}>
         Play
