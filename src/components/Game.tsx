@@ -1,5 +1,5 @@
 import { Category, maybeBuzzPhone, shuffled } from "@/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, TouchEventHandler } from "react";
 import Credits from "./Credits";
 
 type Props = {
@@ -39,6 +39,11 @@ export default function Game({
       setSecondsLeft((left) => left - 1);
     }, 1000);
     countdown.current = interval;
+  };
+
+  const handleTouch = (clueSuccess: boolean): TouchEventHandler<HTMLButtonElement> => (event) => {
+    event.preventDefault();
+    onNextClue(clueSuccess)
   };
 
   // logic to end the game
@@ -157,7 +162,8 @@ export default function Game({
         />
         <button
           className={`absolute left-0 top-0 w-1/2 h-screen flex`}
-          onMouseDown={() => onNextClue(false)}
+          onClick={() => onNextClue(false)}
+          onTouchStart={handleTouch(false)}
         >
           <div className="self-end p-12">Skip</div>
         </button>
@@ -170,7 +176,8 @@ export default function Game({
         />
         <button
           className={`absolute right-0 top-0 w-1/2 h-screen flex`}
-          onMouseDown={() => onNextClue(true)}
+          onClick={() => onNextClue(true)}
+          onTouchStart={handleTouch(true)}
         >
           <div className="p-12 flex-1 self-end text-right">Success</div>
         </button>
