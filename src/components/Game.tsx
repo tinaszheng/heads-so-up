@@ -110,7 +110,7 @@ export default function Game({
     return (
       <button
         className="text-indigo-300 absolute h-screen w-screen top-0 left-0 text-4xl"
-        onClick={startGame}
+        onMouseDown={startGame}
       >
         Click anywhere to start!
       </button>
@@ -157,7 +157,7 @@ export default function Game({
         />
         <button
           className={`absolute left-0 top-0 w-1/2 h-screen flex`}
-          onClick={() => onNextClue(false)}
+          onMouseDown={() => onNextClue(false)}
         >
           <div className="self-end p-12">Skip</div>
         </button>
@@ -170,7 +170,7 @@ export default function Game({
         />
         <button
           className={`absolute right-0 top-0 w-1/2 h-screen flex`}
-          onClick={() => onNextClue(true)}
+          onMouseDown={() => onNextClue(true)}
         >
           <div className="p-12 flex-1 self-end text-right">Success</div>
         </button>
