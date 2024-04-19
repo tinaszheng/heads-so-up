@@ -18,6 +18,8 @@ export default function Document() {
           rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍜</text></svg>"
         ></link>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7934006083247695"
+          crossOrigin="anonymous"></script>
       </Head>
       <body>
         <Main />
