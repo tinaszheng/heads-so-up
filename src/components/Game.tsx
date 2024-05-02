@@ -1,5 +1,11 @@
 import { Category, maybeBuzzPhone, shuffled } from "@/utils";
-import { useEffect, useRef, useState, TouchEventHandler } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  TouchEventHandler,
+  PropsWithChildren,
+} from "react";
 import Credits from "./Credits";
 
 type Props = {
@@ -13,6 +19,43 @@ type Result = {
 }[];
 
 const DEFAULT_GAME_TIME = 60; // 1 minute
+
+const ClueButton = ({
+  className,
+  onNextClue,
+  success,
+  children,
+}: PropsWithChildren<{
+  className: string;
+  onNextClue: (success: boolean) => void;
+  success: boolean;
+}>) => {
+  const ignoreClick = useRef(false);
+
+  const handleTouch =
+    (clueSuccess: boolean): TouchEventHandler<HTMLButtonElement> =>
+    (_) => {
+      onNextClue(clueSuccess);
+      ignoreClick.current = true;
+    };
+
+  const handleClick = (clueSuccess: boolean) => {
+    if (!ignoreClick.current) {
+      onNextClue(clueSuccess);
+    }
+    ignoreClick.current = false;
+  };
+
+  return (
+    <button
+      className={className}
+      onClick={() => handleClick(success)}
+      onTouchStart={handleTouch(success)}
+    >
+      {children}
+    </button>
+  );
+};
 
 export default function Game({
   category: { difficulty, prompt, clues },
@@ -39,11 +82,6 @@ export default function Game({
       setSecondsLeft((left) => left - 1);
     }, 1000);
     countdown.current = interval;
-  };
-
-  const handleTouch = (clueSuccess: boolean): TouchEventHandler<HTMLButtonElement> => (event) => {
-    event.preventDefault();
-    onNextClue(clueSuccess)
   };
 
   // logic to end the game
@@ -160,13 +198,13 @@ export default function Game({
           }}
           className={`-z-50 absolute left-0 top-0 w-1/2 h-screen flex bg-yellow-100`}
         />
-        <button
+        <ClueButton
           className={`absolute left-0 top-0 w-1/2 h-screen flex`}
-          onClick={() => onNextClue(false)}
-          onTouchStart={handleTouch(false)}
+          onNextClue={onNextClue}
+          success={false}
         >
           <div className="self-end p-12">Skip</div>
-        </button>
+        </ClueButton>
         <div
           style={{
             opacity: previousClueSuccess === true ? 1 : 0,
@@ -174,13 +212,13 @@ export default function Game({
           }}
           className={`-z-50 absolute right-0 top-0 w-1/2 h-screen flex bg-green-100`}
         />
-        <button
+        <ClueButton
           className={`absolute right-0 top-0 w-1/2 h-screen flex`}
-          onClick={() => onNextClue(true)}
-          onTouchStart={handleTouch(true)}
+          onNextClue={onNextClue}
+          success={true}
         >
           <div className="p-12 flex-1 self-end text-right">Success</div>
-        </button>
+        </ClueButton>
       </div>
     </div>
   );
