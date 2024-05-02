@@ -1,5 +1,11 @@
 import { Category, maybeBuzzPhone, shuffled } from "@/utils";
-import { useEffect, useRef, useState, TouchEventHandler } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  TouchEventHandler,
+  PropsWithChildren,
+} from "react";
 import Credits from "./Credits";
 
 type Props = {
@@ -14,14 +20,24 @@ type Result = {
 
 const DEFAULT_GAME_TIME = 60; // 1 minute
 
-const ClueButton = ({ onNextClue, success }) => {
+const ClueButton = ({
+  className,
+  onNextClue,
+  success,
+  children,
+}: PropsWithChildren<{
+  className: string;
+  onNextClue: (success: boolean) => void;
+  success: boolean;
+}>) => {
   const ignoreClick = useRef(false);
 
-  const handleTouch = (clueSuccess: boolean): TouchEventHandler<HTMLButtonElement> => (event) => {
-    event.preventDefault();
-    onNextClue(clueSuccess);
-    ignoreClick.current = true;
-  };
+  const handleTouch =
+    (clueSuccess: boolean): TouchEventHandler<HTMLButtonElement> =>
+    (_) => {
+      onNextClue(clueSuccess);
+      ignoreClick.current = true;
+    };
 
   const handleClick = (clueSuccess: boolean) => {
     if (!ignoreClick.current) {
@@ -32,9 +48,12 @@ const ClueButton = ({ onNextClue, success }) => {
 
   return (
     <button
+      className={className}
       onClick={() => handleClick(success)}
       onTouchStart={handleTouch(success)}
-    />
+    >
+      {children}
+    </button>
   );
 };
 
@@ -184,7 +203,7 @@ export default function Game({
           onNextClue={onNextClue}
           success={false}
         >
-            <div className="self-end p-12">Skip</div>
+          <div className="self-end p-12">Skip</div>
         </ClueButton>
         <div
           style={{
